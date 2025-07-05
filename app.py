@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from yt_dlp import YoutubeDL
+import os  # Needed for Render
 
 app = Flask(__name__)
 
@@ -28,7 +29,7 @@ def download():
     try:
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
-            direct_url = info.get('url')  # Fallback if no formats found
+            direct_url = info.get('url')
             if 'requested_downloads' in info:
                 direct_url = info['requested_downloads'][0]['url']
             
@@ -37,4 +38,6 @@ def download():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run()
+    # FOR RENDER: bind to 0.0.0.0 and use the port Render gives us
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
