@@ -11,6 +11,7 @@ def index():
 @app.route('/download', methods=['POST'])
 def download():
     data = request.get_json()
+    print("Received data:", data)  # <--- ADD THIS
 
     video_url = data.get('url')
     format_type = data.get('format', 'mp4')
@@ -35,7 +36,9 @@ def download():
                 direct_url = info['requested_downloads'][0]['url']
             return jsonify({'download_url': direct_url})
     except Exception as e:
+        print("ERROR:", str(e))  # <--- ADD THIS
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
