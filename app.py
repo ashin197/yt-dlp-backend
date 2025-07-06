@@ -19,14 +19,14 @@ def download():
 
     if not video_url:
         return jsonify({'error': 'Missing video URL'}), 400
-ydl_opts = {
-    'quiet': True,
-    'skip_download': True,
-    'format': 'best[ext=mp4]/best',
-    'noplaylist': True,
-    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-}
 
+    ydl_opts = {
+        'quiet': True,
+        'skip_download': True,
+        'format': f'bestvideo[ext={format_type}][height<={quality}]+bestaudio/best',
+        'noplaylist': True,
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    }
 
     try:
         with YoutubeDL(ydl_opts) as ydl:
